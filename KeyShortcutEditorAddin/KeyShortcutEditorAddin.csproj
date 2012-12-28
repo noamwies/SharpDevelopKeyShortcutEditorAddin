@@ -29,8 +29,8 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpDevelop">
-      <HintPath>Refs\ICSharpCode.SharpDevelop.dll</HintPath>
+    <Reference Include="ICSharpCode.Core">
+      <HintPath>Refs\ICSharpCode.Core.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Configuration\AssemblyInfo.cs" />
     <Compile Include="EditKeyShortcutInAddinFiles.cs" />
+    <Compile Include="EditShortcutsuCommand.cs" />
     <Compile Include="KeyShortcut.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
