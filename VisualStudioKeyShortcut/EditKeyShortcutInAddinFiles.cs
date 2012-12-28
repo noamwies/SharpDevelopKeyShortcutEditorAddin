@@ -58,9 +58,10 @@ namespace VisualStudioKeyShortcut
 					var xml = XDocument.Load(fileStream);						
 					foreach (var shortcut in file) {
 						var shortcutInXml = xml.Root.XPathSelectElement(string.Format(@"//MenuItem[@label='']",shortcut.Label));
-						
-												
+						shortcutInXml.SetAttributeValue("shortcut",shortcut.Shortcut)												
 					}
+					fileStream.Seek(0,SeekOrigin.Begin);
+					xml.Save(FileStream)
 				}				
 			}
 		}
