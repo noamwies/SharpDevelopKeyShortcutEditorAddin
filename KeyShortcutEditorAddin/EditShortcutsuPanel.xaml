@@ -4,5 +4,11 @@
                 xmlns:widgets="http://icsharpcode.net/sharpdevelop/widgets" 
                 xmlns:sd="http://icsharpcode.net/sharpdevelop/core"                
 				x:Class="KeyShortcutEditorAddin.EditShortcutsuPanel">
+<StackPanel Orientation="Vertical">
+	<StackPanel Orientation="Horizontal">
+		<Button Click="Export" >Export</Button> 
+		<Button Click="Import" >Import</Button> 
+	</StackPanel>	
+</StackPanel>
 
 </ui:OptionPanel>

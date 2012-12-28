@@ -13,7 +13,7 @@
 	</Path>
 	-->
 	<Path name = "/SharpDevelop/Dialogs/OptionsDialog">
-		<OptionPanel id    = "KeybordShortcuts"		             
+		<OptionPanel id    = "KeybordShortcuts"		>             
 		             <OptionPanel id    = "EditShourtcuts"
 			             label = "Edit Shourtcuts"
 			             class = "KeyShortcutEditorAddin.EditShortcutsuCommand"/>

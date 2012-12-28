@@ -28,5 +28,16 @@ namespace KeyShortcutEditorAddin
 		{
 			InitializeComponent();
 		}
+		
+		public void Export(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("Export");
+		}
+		
+		public void Import(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("Import");
+		}
+		
 	}
 }
