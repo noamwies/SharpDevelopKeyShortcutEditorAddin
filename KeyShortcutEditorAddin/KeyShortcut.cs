@@ -8,7 +8,7 @@
  */
 using System;
 
-namespace VisualStudioKeyShortcut
+namespace KeyShortcutEditorAddin
 {
 	/// <summary>
 	/// Description of KeyShortcut.

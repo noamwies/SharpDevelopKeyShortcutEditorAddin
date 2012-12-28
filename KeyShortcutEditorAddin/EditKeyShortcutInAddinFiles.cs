@@ -15,7 +15,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace VisualStudioKeyShortcut
+namespace KeyShortcutEditorAddin
 {
 	/// <summary>
 	/// Description of EditKeyShortcutInAddinFiles.
@@ -58,10 +58,10 @@ namespace VisualStudioKeyShortcut
 					var xml = XDocument.Load(fileStream);						
 					foreach (var shortcut in file) {
 						var shortcutInXml = xml.Root.XPathSelectElement(string.Format(@"//MenuItem[@label='']",shortcut.Label));
-						shortcutInXml.SetAttributeValue("shortcut",shortcut.Shortcut)												
+						shortcutInXml.SetAttributeValue("shortcut",shortcut.Shortcut);											
 					}
 					fileStream.Seek(0,SeekOrigin.Begin);
-					xml.Save(FileStream)
+					xml.Save(fileStream);
 				}				
 			}
 		}
