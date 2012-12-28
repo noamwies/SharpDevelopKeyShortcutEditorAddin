@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AddInWritingHelp.txt" />
-    <None Include="VisualStudioKeyShortcut.addin">
+    <None Include="KeyShortcutEditorAddin.addin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

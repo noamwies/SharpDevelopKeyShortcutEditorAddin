@@ -1,10 +1,10 @@
-﻿<AddIn name        = "VisualStudioKeyShortcut"
+﻿<AddIn name        = "KeyShortcutEditorAddin"
        author      = "Noam"
        url         = ""
        description = "TODO: Change KeyShortcut to Visual Studio KeyShortcut">
 	
 	<Runtime>
-		<Import assembly = "VisualStudioKeyShortcut.dll"/>
+		<Import assembly = "KeyShortcutEditorAddin.dll"/>
 	</Runtime>
 	
 	<!-- Extend the SharpDevelop AddIn-Tree like this:
