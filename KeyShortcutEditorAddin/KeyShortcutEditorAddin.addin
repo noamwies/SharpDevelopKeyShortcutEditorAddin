@@ -12,9 +12,11 @@
 		<.../>
 	</Path>
 	-->
-	<Path name = "/SharpDevelop/Workbench/MainMenu/Tools">
-		<MenuItem id = "EditShourtcuts"
-		          label = "Edit Shourtcuts"
-		          class = "KeyShortcutEditorAddin.EditShortcutsuCommand"/>
+	<Path name = "/SharpDevelop/Dialogs/OptionsDialog">
+		<OptionPanel id    = "KeybordShortcuts"		             
+		             <OptionPanel id    = "EditShourtcuts"
+			             label = "Edit Shourtcuts"
+			             class = "KeyShortcutEditorAddin.EditShortcutsuCommand"/>
+		</OptionPanel>
 	</Path>
 </AddIn>

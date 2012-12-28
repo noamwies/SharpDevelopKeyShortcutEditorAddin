@@ -1,0 +1,8 @@
+﻿<ui:OptionPanel xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                xmlns:ui="clr-namespace:ICSharpCode.SharpDevelop.Gui;assembly=ICSharpCode.SharpDevelop" 
+                xmlns:widgets="http://icsharpcode.net/sharpdevelop/widgets" 
+                xmlns:sd="http://icsharpcode.net/sharpdevelop/core"                
+				x:Class="KeyShortcutEditorAddin.EditShortcutsuPanel">
+
+</ui:OptionPanel>

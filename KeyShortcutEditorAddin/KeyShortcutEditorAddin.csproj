@@ -32,6 +32,12 @@
     <Reference Include="ICSharpCode.Core">
       <HintPath>Refs\ICSharpCode.Core.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.Core.Presentation">
+      <HintPath>Refs\ICSharpCode.Core.Presentation.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpDevelop">
+      <HintPath>Refs\ICSharpCode.SharpDevelop.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -60,8 +66,14 @@
   <ItemGroup>
     <Compile Include="Configuration\AssemblyInfo.cs" />
     <Compile Include="EditKeyShortcutInAddinFiles.cs" />
-    <Compile Include="EditShortcutsuCommand.cs" />
+    <Compile Include="EditShortcutsuPanel.xaml.cs">
+      <DependentUpon>EditShortcutsuPanel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="KeyShortcut.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="EditShortcutsuPanel.xaml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
