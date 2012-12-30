@@ -47,8 +47,10 @@ namespace KeyShortcutEditorAddin
 		public void ChangeKeyShortcut(string label,string key){
 			IEnumerable<KeyShortcut> shortcuts = from k in KeyShortcuts where k.Label == label select k;
 			foreach (var shortcut in shortcuts) {
-				shortcut.HasModified = true;
-				shortcut.Shortcut = key;	
+				if (shortcut.Shortcut != key) {
+					shortcut.HasModified = true;
+					shortcut.Shortcut = key;		
+				}				
 			}			
 		}
 		
@@ -56,14 +58,21 @@ namespace KeyShortcutEditorAddin
 		{
 			var keys = (from k in KeyShortcuts where k.HasModified == true select k ).ToLookup( s => s.AddinFileName , u => u);
 			foreach (var file in keys) {
+				XDocument xml;
 				using (var fileStream = new FileStream(file.Key,FileMode.Open)) {
-					var xml = XDocument.Load(fileStream);						
+					xml = XDocument.Load(fileStream);						
 					foreach (var shortcut in file) {
-						var shortcutInXml = xml.Root.XPathSelectElement(string.Format(@"//MenuItem[@label='']",shortcut.Label));
-						shortcutInXml.SetAttributeValue("shortcut",shortcut.Shortcut);											
+						var shortcutsInXml = xml.Root.XPathSelectElements(string.Format(@"//MenuItem[@label='{0}']",shortcut.Label));
+						foreach (var shortcutInXml in shortcutsInXml) {
+							shortcutInXml.SetAttributeValue("shortcut",shortcut.Shortcut);		
+						}																
+					}					
+				}	
+				File.Delete(file.Key);
+				using (var fileStream = new FileStream(file.Key,FileMode.CreateNew)) {
+					using (var writer = new StreamWriter(fileStream)) {
+						writer.Write(xml.ToString());
 					}
-					fileStream.Seek(0,SeekOrigin.Begin);
-					xml.Save(fileStream);
 				}				
 			}
 		}
