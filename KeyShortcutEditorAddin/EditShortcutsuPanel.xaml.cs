@@ -15,10 +15,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Serialization;
 using ICSharpCode.SharpDevelop.Gui;
+using ICSharpCode.SharpDevelop.Project.Commands;
 
 namespace KeyShortcutEditorAddin
 {
@@ -39,21 +41,34 @@ namespace KeyShortcutEditorAddin
 		
 		public void Export(object sender, RoutedEventArgs e)
 		{
-			string path = "";
-			using (var file = new FileStream(path,FileMode.CreateNew))
-			{
-				_serialzer.Serialize(file,_shortcutsEditor.KeyShortcuts);
+			OpenFileDialog dialog = new OpenFileDialog();
+			var result = dialog.ShowDialog();
+			if (result == DialogResult.OK) {
+				string path = dialog.FileName;
+				if (String.IsNullOrEmpty(path)){
+					using (var file = new FileStream(path,FileMode.Open))
+					{
+						_serialzer.Serialize(file,_shortcutsEditor.KeyShortcuts);
+					}
+				}
 			}
 		}
+		
 
 		public void Import(object sender, RoutedEventArgs e)
 		{
-			string path = "";
-			using (var file = new FileStream(path,FileMode.Open))
-			{
-				var shortcuts = _serialzer.Deserialize(file) as List<KeyShortcut>;
-				foreach (var s in shortcuts) {
-					_shortcutsEditor.ChangeKeyShortcut(s.Label,s.Shortcut);
+			OpenFileDialog dialog = new OpenFileDialog();
+			var result = dialog.ShowDialog();
+			if (result == DialogResult.OK) {
+				string path = dialog.FileName;
+				if (String.IsNullOrEmpty(path)){
+					using (var file = new FileStream(path,FileMode.Open))
+					{
+						var shortcuts = _serialzer.Deserialize(file) as List<KeyShortcut>;
+						foreach (var s in shortcuts) {
+							_shortcutsEditor.ChangeKeyShortcut(s.Label,s.Shortcut);
+						}
+					}
 				}
 			}
 		}
