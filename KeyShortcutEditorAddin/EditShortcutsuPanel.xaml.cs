@@ -31,6 +31,7 @@ namespace KeyShortcutEditorAddin
 	{
 		private EditKeyShortcutInAddinFiles _shortcutsEditor;
 		private XmlSerializer _serialzer;
+		private static readonly string SHARP_DEVELOP_SHORTCUTS_FILTER = "#Develop Shortcuts|*.sht";
 		
 		public EditShortcutsuPanel()
 		{
@@ -42,7 +43,7 @@ namespace KeyShortcutEditorAddin
 		public void Export(object sender, RoutedEventArgs e)
 		{
 			var dialog = new SaveFileDialog();
-			dialog.Filter = ".sht";
+			dialog.Filter = SHARP_DEVELOP_SHORTCUTS_FILTER;
 			var result = dialog.ShowDialog();
 			if (result == DialogResult.OK) {
 				string path = dialog.FileName;
@@ -60,7 +61,7 @@ namespace KeyShortcutEditorAddin
 		{
 			var dialog = new OpenFileDialog();
 			var result = dialog.ShowDialog();
-			dialog.Filter = "*.sht";
+			dialog.Filter = SHARP_DEVELOP_SHORTCUTS_FILTER;
 			if (result == DialogResult.OK) {
 				string path = dialog.FileName;
 				if (String.IsNullOrEmpty(path)){
