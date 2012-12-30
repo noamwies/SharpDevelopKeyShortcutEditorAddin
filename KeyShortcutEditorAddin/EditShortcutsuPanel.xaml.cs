@@ -42,20 +42,20 @@ namespace KeyShortcutEditorAddin
 			string path = "";
 			using (var file = new FileStream(path,FileMode.CreateNew))
 			{
-				_serialzer.Serialize(file,_shortcutsEditor.KeyShortcuts);				
+				_serialzer.Serialize(file,_shortcutsEditor.KeyShortcuts);
 			}
-		}		
+		}
 
 		public void Import(object sender, RoutedEventArgs e)
 		{
 			string path = "";
 			using (var file = new FileStream(path,FileMode.Open))
 			{
-				var shortcuts = _serialzer.Deserialize(file) as List<KeyShortcut>;	
+				var shortcuts = _serialzer.Deserialize(file) as List<KeyShortcut>;
 				foreach (var s in shortcuts) {
 					_shortcutsEditor.ChangeKeyShortcut(s.Label,s.Shortcut);
-				}				
+				}
 			}
-		}		
+		}
 	}
 }
