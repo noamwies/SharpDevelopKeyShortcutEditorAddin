@@ -41,12 +41,13 @@ namespace KeyShortcutEditorAddin
 		
 		public void Export(object sender, RoutedEventArgs e)
 		{
-			OpenFileDialog dialog = new OpenFileDialog();
+			var dialog = new SaveFileDialog();
+			dialog.Filter = ".sht";
 			var result = dialog.ShowDialog();
 			if (result == DialogResult.OK) {
 				string path = dialog.FileName;
 				if (String.IsNullOrEmpty(path)){
-					using (var file = new FileStream(path,FileMode.Open))
+					using (var file = new FileStream(path,FileMode.OpenOrCreate,FileAccess.Write))
 					{
 						_serialzer.Serialize(file,_shortcutsEditor.KeyShortcuts);
 					}
@@ -57,8 +58,9 @@ namespace KeyShortcutEditorAddin
 
 		public void Import(object sender, RoutedEventArgs e)
 		{
-			OpenFileDialog dialog = new OpenFileDialog();
+			var dialog = new OpenFileDialog();
 			var result = dialog.ShowDialog();
+			dialog.Filter = "*.sht";
 			if (result == DialogResult.OK) {
 				string path = dialog.FileName;
 				if (String.IsNullOrEmpty(path)){
