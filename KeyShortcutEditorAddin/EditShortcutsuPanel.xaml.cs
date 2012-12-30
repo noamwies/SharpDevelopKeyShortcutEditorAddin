@@ -54,11 +54,8 @@ namespace KeyShortcutEditorAddin
 			var result = dialog.ShowDialog();
 			if (result == DialogResult.OK) {
 				string path = dialog.FileName;
-				if (dialog.CheckPathExists) {
-					Directory.CreateDirectory(path);
-				}
 				if (false == String.IsNullOrEmpty(path)){
-					using (var file = new FileStream(path,FileMode.OpenOrCreate,FileAccess.Write))
+					using (var file = new FileStream(path,FileMode.Create))
 					{
 						_serialzer.Serialize(file,_shortcutsEditor.KeyShortcuts);
 					}
@@ -85,6 +82,7 @@ namespace KeyShortcutEditorAddin
 					}
 				}
 			}
+			_shortcutsEditor.Apply();
 		}
 	}
 }

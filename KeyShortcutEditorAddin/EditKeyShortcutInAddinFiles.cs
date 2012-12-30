@@ -45,9 +45,11 @@ namespace KeyShortcutEditorAddin
 		}
 		
 		public void ChangeKeyShortcut(string label,string key){
-			KeyShortcut shortcut = (from k in KeyShortcuts where k.Label == label select k).Single();
-			shortcut.HasModified = true;
-			shortcut.Shortcut = key;
+			IEnumerable<KeyShortcut> shortcuts = from k in KeyShortcuts where k.Label == label select k;
+			foreach (var shortcut in shortcuts) {
+				shortcut.HasModified = true;
+				shortcut.Shortcut = key;	
+			}			
 		}
 		
 		public void Apply()
