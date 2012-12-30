@@ -47,7 +47,7 @@ namespace KeyShortcutEditorAddin
 			var result = dialog.ShowDialog();
 			if (result == DialogResult.OK) {
 				string path = dialog.FileName;
-				if (String.IsNullOrEmpty(path)){
+				if (false == String.IsNullOrEmpty(path)){
 					using (var file = new FileStream(path,FileMode.OpenOrCreate,FileAccess.Write))
 					{
 						_serialzer.Serialize(file,_shortcutsEditor.KeyShortcuts);
@@ -64,7 +64,7 @@ namespace KeyShortcutEditorAddin
 			dialog.Filter = SHARP_DEVELOP_SHORTCUTS_FILTER;
 			if (result == DialogResult.OK) {
 				string path = dialog.FileName;
-				if (String.IsNullOrEmpty(path)){
+				if (false == String.IsNullOrEmpty(path)){
 					using (var file = new FileStream(path,FileMode.Open))
 					{
 						var shortcuts = _serialzer.Deserialize(file) as List<KeyShortcut>;
