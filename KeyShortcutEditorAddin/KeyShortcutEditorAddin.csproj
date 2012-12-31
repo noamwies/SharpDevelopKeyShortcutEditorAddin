@@ -70,7 +70,9 @@
       <DependentUpon>EditShortcutsuPanel.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="KeyShortcut.cs" />
+    <Compile Include="KeyShortcutModel.cs" />
+    <Compile Include="ObservableCollectionExtention.cs" />
+    <Compile Include="ShortcutView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="EditShortcutsuPanel.xaml" />

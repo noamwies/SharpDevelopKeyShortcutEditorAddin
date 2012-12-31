@@ -1,14 +1,36 @@
-﻿<ui:OptionPanel xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<?xml version="1.0" encoding="utf-8"?>
+<ui:OptionPanel xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                 xmlns:ui="clr-namespace:ICSharpCode.SharpDevelop.Gui;assembly=ICSharpCode.SharpDevelop" 
                 xmlns:widgets="http://icsharpcode.net/sharpdevelop/widgets" 
-                xmlns:sd="http://icsharpcode.net/sharpdevelop/core"                
-				x:Class="KeyShortcutEditorAddin.EditShortcutsuPanel">
-<StackPanel Orientation="Vertical">
-	<StackPanel Orientation="Horizontal">
-		<Button Click="Export" >Export</Button> 
-		<Button Click="Import" >Import</Button> 
-	</StackPanel>	
-</StackPanel>
-
+                xmlns:sd="http://icsharpcode.net/sharpdevelop/core"
+                x:Class="KeyShortcutEditorAddin.EditShortcutsuPanel" 
+                xmlns:local="clr-namespace:KeyShortcutEditorAddin">
+    
+	<StackPanel
+		Orientation="Vertical">
+    	<StackPanel
+			Orientation="Horizontal">
+			<Button
+				Click="Export">Export</Button>
+			<Button
+				Click="Import">Import</Button>
+            <Button Name="_applyButton" Click="Apply">Apply</Button>
+            <Label
+				Name="_restart"
+				Content="Label"		/>
+        </StackPanel>
+        <ListBox x:Name="_shortcutsView" ItemsSource="{Binding}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="local:ShortcutView">
+                    <StackPanel 
+                            Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding Path=ShouldExport}"/>
+                        <TextBlock Text="{Binding Path=Operation}"/>
+                        <TextBox Text="{Binding Path=Key}" />
+                    </StackPanel>
+                </DataTemplate>
+             </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
 </ui:OptionPanel>

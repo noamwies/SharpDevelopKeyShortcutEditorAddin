@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -22,6 +23,7 @@ using System.Windows.Media;
 using System.Xml.Serialization;
 using ICSharpCode.SharpDevelop.Gui;
 using ICSharpCode.SharpDevelop.Project.Commands;
+using System.Collections.ObjectModel;
 
 namespace KeyShortcutEditorAddin
 {
@@ -34,7 +36,8 @@ namespace KeyShortcutEditorAddin
 		private XmlSerializer _serialzer;
 		private static readonly string SHARP_DEVELOP_SHORTCUTS_FILTER = "#Develop Shortcuts|*.sht";
 		private static readonly string SHORTCUTS_DEFAULT_DIRECTORY;
-		
+        public ObservableCollection<ShortcutView> Shortcuts { get; set; }
+
 		static EditShortcutsuPanel(){
 			SHORTCUTS_DEFAULT_DIRECTORY = Path.Combine(Path.GetDirectoryName(Assembly.GetAssembly(typeof(EditShortcutsuPanel)).Location),"Shortcuts");
 		}
@@ -42,8 +45,10 @@ namespace KeyShortcutEditorAddin
 		public EditShortcutsuPanel()
 		{
 			InitializeComponent();
-			_serialzer = new XmlSerializer(typeof(List<KeyShortcut>));
+			_serialzer = new XmlSerializer(typeof(List<KeyShortcutModel>));
 			_shortcutsEditor = new EditKeyShortcutInAddinFiles();
+            Shortcuts = ModelToView(_shortcutsEditor.KeyShortcuts);
+            _shortcutsView.DataContext = Shortcuts;
 		}
 		
 		public void Export(object sender, RoutedEventArgs e)
@@ -75,13 +80,23 @@ namespace KeyShortcutEditorAddin
 				if (false == String.IsNullOrEmpty(path)){
 					using (var file = new FileStream(path,FileMode.Open))
 					{
-						var shortcuts = _serialzer.Deserialize(file) as List<KeyShortcut>;
+						var shortcuts = _serialzer.Deserialize(file) as List<KeyShortcutModel>;
 						foreach (var s in shortcuts) {
-							_shortcutsEditor.ChangeKeyShortcut(s.Label,s.Shortcut);
+							_shortcutsEditor.ChangeKeyShortcut(s.Operation,s.Key);     
 						}
 					}
 				}
 			}
+            Shortcuts = ModelToView(_shortcutsEditor.KeyShortcuts);
+			_shortcutsEditor.Apply();
+		}
+
+        private ObservableCollection<ShortcutView> ModelToView(List<KeyShortcutModel> model) {
+            return model.Select(s => new ShortcutView { Key = s.Key, Operation = s.Operation }).ToObservableCollection<ShortcutView>();
+        }
+
+		
+		public void Apply(object sender, RoutedEventArgs e){
 			_shortcutsEditor.Apply();
 		}
 	}

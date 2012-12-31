@@ -24,14 +24,14 @@ namespace KeyShortcutEditorAddin
 	{
 		private string _addinDirectory;
 		
-		public List<KeyShortcut> KeyShortcuts { get;private  set; }
+		public List<KeyShortcutModel> KeyShortcuts { get;private  set; }
 			
 		public EditKeyShortcutInAddinFiles()
 		{
 			_addinDirectory = Path.GetDirectoryName(Assembly.GetAssembly(this.GetType()).Location);
 			int prefixStopIndex = _addinDirectory.IndexOf("AddIns");
 			_addinDirectory = _addinDirectory.Substring(0,prefixStopIndex+6); // add 6 for the word "AddIns"
-			KeyShortcuts = new List<KeyShortcut>();
+			KeyShortcuts = new List<KeyShortcutModel>();
 			string [] addinFiles = Directory.GetFiles(_addinDirectory,"*.addin",SearchOption.AllDirectories);
 			foreach (var addin in addinFiles) {
 				var xml = XDocument.Load(addin);				
@@ -39,17 +39,17 @@ namespace KeyShortcutEditorAddin
 				foreach (var shortcuts in shortcutsInXml) {
 					string name = shortcuts.Attribute("shortcut").Value;
 					string label = shortcuts.Attribute("label").Value; 
-					KeyShortcuts.Add(new KeyShortcut{AddinFileName = addin,HasModified = false,Shortcut=name,Label = label});
+					KeyShortcuts.Add(new KeyShortcutModel{AddinFileName = addin,HasModified = false,Key=name,Operation = label});
 				}
 			}
 		}
 		
 		public void ChangeKeyShortcut(string label,string key){
-			IEnumerable<KeyShortcut> shortcuts = from k in KeyShortcuts where k.Label == label select k;
+			IEnumerable<KeyShortcutModel> shortcuts = from k in KeyShortcuts where k.Operation == label select k;
 			foreach (var shortcut in shortcuts) {
-				if (shortcut.Shortcut != key) {
+				if (shortcut.Key != key) {
 					shortcut.HasModified = true;
-					shortcut.Shortcut = key;		
+					shortcut.Key = key;		
 				}				
 			}			
 		}
@@ -62,9 +62,9 @@ namespace KeyShortcutEditorAddin
 				using (var fileStream = new FileStream(file.Key,FileMode.Open)) {
 					xml = XDocument.Load(fileStream);						
 					foreach (var shortcut in file) {
-						var shortcutsInXml = xml.Root.XPathSelectElements(string.Format(@"//MenuItem[@label='{0}']",shortcut.Label));
+						var shortcutsInXml = xml.Root.XPathSelectElements(string.Format(@"//MenuItem[@label='{0}']",shortcut.Operation));
 						foreach (var shortcutInXml in shortcutsInXml) {
-							shortcutInXml.SetAttributeValue("shortcut",shortcut.Shortcut);		
+							shortcutInXml.SetAttributeValue("shortcut",shortcut.Key);		
 						}																
 					}					
 				}	

@@ -13,17 +13,17 @@ namespace KeyShortcutEditorAddin
 	/// <summary>
 	/// Description of KeyShortcut.
 	/// </summary>
-	public class KeyShortcut
+	public class KeyShortcutModel
 	{
 		public bool HasModified { get; set; }
 		
-		public string Shortcut { get; set; }
+		public string Key { get; set; }
 		
 		public string AddinFileName { get; set; }
 		
-		public string Label { get; set; }
+		public string Operation { get; set; }
 		
-		public KeyShortcut()
+		public KeyShortcutModel()
 		{
 			HasModified = false;
 		}		
