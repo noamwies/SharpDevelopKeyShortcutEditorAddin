@@ -8,6 +8,8 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.IO;
 using System.Reflection;
@@ -24,6 +26,7 @@ using System.Xml.Serialization;
 using ICSharpCode.SharpDevelop.Gui;
 using ICSharpCode.SharpDevelop.Project.Commands;
 using System.Collections.ObjectModel;
+using MoreLinq;
 
 namespace KeyShortcutEditorAddin
 {
@@ -49,7 +52,22 @@ namespace KeyShortcutEditorAddin
 			_shortcutsEditor = new EditKeyShortcutInAddinFiles();
             Shortcuts = ModelToView(_shortcutsEditor.KeyShortcuts);
             _shortcutsView.DataContext = Shortcuts;
+            foreach (var element in Shortcuts) {
+            	element.PropertyChanged += new PropertyChangedEventHandler(ShortcutChange);	
+            }
 		}
+
+		void ShortcutChange(object sender,  PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == "Key") {
+				var s = sender as ShortcutView;
+				ICSharpCode.Core.LoggingService.InfoFormatted("key shortcut of {0} changed to {1}",s.Operation,s.Key);
+				_shortcutsEditor.ChangeKeyShortcut(s.Operation,s.Key);	
+				_applayLabel.Visibility = Visibility.Visible;				
+			}
+		}
+
+		
 		
 		public void Export(object sender, RoutedEventArgs e)
 		{
@@ -92,12 +110,29 @@ namespace KeyShortcutEditorAddin
 		}
 
         private ObservableCollection<ShortcutView> ModelToView(List<KeyShortcutModel> model) {
-            return model.Select(s => new ShortcutView { Key = s.Key, Operation = s.Operation }).ToObservableCollection<ShortcutView>();
+			return model.Select(s => new ShortcutView { Key = s.Key, Operation = s.Operation}).DistinctBy( s => s.Operation ).ToObservableCollection<ShortcutView>();
         }
 
 		
 		public void Apply(object sender, RoutedEventArgs e){
 			_shortcutsEditor.Apply();
+			_restartLabel.Visibility = Visibility.Visible;
+			_applayLabel.Visibility = Visibility.Collapsed;
+		}
+		
+		void SelectAll_Checked(object sender, RoutedEventArgs e)
+		{
+			if (Shortcuts != null) {
+				foreach (var element in Shortcuts) {
+					element.ShouldExport = _selectAll.IsChecked.Value;
+				}	
+			}			
+		}
+		
+		void Restart(object sender, RoutedEventArgs e)
+		{
+			System.Windows.Forms.Application.Restart();
+			Environment.Exit(0);
 		}
 	}
 }

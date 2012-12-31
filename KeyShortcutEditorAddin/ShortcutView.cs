@@ -15,6 +15,12 @@ namespace KeyShortcutEditorAddin
 
         private bool _shouldExport;
 
+        public string OperationView{
+        	get{
+        		return ICSharpCode.Core.StringParser.Parse(_operation).Replace("&",string.Empty); 
+        	}
+        }
+        
         public string Operation {
             get { return _operation; }
             set { _operation = value; OnPropertyChanged("Operation"); }
