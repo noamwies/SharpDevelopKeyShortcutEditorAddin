@@ -17,7 +17,7 @@
 			<Label
 				x:Name="_applayLabel"
 				Visibility="Hidden"
-				Content="Changes willn't take afect until you click apply" />	
+				Content="Changes will not take afect until you click apply" />	
 			<Label
 				x:Name="_restartLabel"
 				Visibility="Hidden"				
@@ -25,26 +25,30 @@
 		</StackPanel>
 		<CheckBox
 			x:Name="_selectAll"
-			IsChecked="True"
+			IsChecked="False"
 			Checked="SelectAll_Checked"
 			Unchecked="SelectAll_Checked">Select For Export</CheckBox>
 		<ListView
 			x:Name="_shortcutsView"
 			ItemsSource="{Binding}"
 			ScrollViewer.CanContentScroll="True"
-			ScrollViewer.VerticalScrollBarVisibility="Visible">
+			ScrollViewer.VerticalScrollBarVisibility="Visible"
+			HorizontalAlignment="Stretch">
+			
 			<ListView.ItemTemplate>
 				<DataTemplate
 					DataType="local:ShortcutView">
-					<StackPanel
-						Orientation="Horizontal">
+					<DockPanel HorizontalAlignment="Center" LastChildFill="True">	
 						<CheckBox
+							DockPanel.Dock="Left"
 							IsChecked="{Binding Path=ShouldExport}" />
 						<TextBlock
+							DockPanel.Dock="Left"
 							Text="{Binding Path=OperationView}" />
 						<TextBox
+							HorizontalAlignment="Right"							
 							Text="{Binding Path=Key}" />
-					</StackPanel>
+					</DockPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
