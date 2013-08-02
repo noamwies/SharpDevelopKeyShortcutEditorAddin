@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # SharpDevelop 4.2.2.8818
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyShortcutEditorAddin", "KeyShortcutEditorAddin\KeyShortcutEditorAddin.csproj", "{B7ECA412-510B-49C0-9380-7BB75467C715}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyShortcutsEditorAddin.Model", "KeyShortcutsEditorAddin.Model\KeyShortcutsEditorAddin.Model.csproj", "{AA750BC0-281C-4919-B2B1-7C3CFD2459FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplyConfiguration", "ApplyConfiguration\ApplyConfiguration.csproj", "{34D1B034-5DEE-41E9-8095-067DFEC28249}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -20,5 +24,21 @@ Global
 		{B7ECA412-510B-49C0-9380-7BB75467C715}.Release|x86.ActiveCfg = Release|x86
 		{B7ECA412-510B-49C0-9380-7BB75467C715}.Release|Any CPU.Build.0 = Release|x86
 		{B7ECA412-510B-49C0-9380-7BB75467C715}.Release|Any CPU.ActiveCfg = Release|x86
+		{AA750BC0-281C-4919-B2B1-7C3CFD2459FE}.Debug|x86.Build.0 = Debug|x86
+		{AA750BC0-281C-4919-B2B1-7C3CFD2459FE}.Debug|x86.ActiveCfg = Debug|x86
+		{AA750BC0-281C-4919-B2B1-7C3CFD2459FE}.Debug|Any CPU.Build.0 = Debug|x86
+		{AA750BC0-281C-4919-B2B1-7C3CFD2459FE}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{AA750BC0-281C-4919-B2B1-7C3CFD2459FE}.Release|x86.Build.0 = Release|x86
+		{AA750BC0-281C-4919-B2B1-7C3CFD2459FE}.Release|x86.ActiveCfg = Release|x86
+		{AA750BC0-281C-4919-B2B1-7C3CFD2459FE}.Release|Any CPU.Build.0 = Release|x86
+		{AA750BC0-281C-4919-B2B1-7C3CFD2459FE}.Release|Any CPU.ActiveCfg = Release|x86
+		{34D1B034-5DEE-41E9-8095-067DFEC28249}.Debug|x86.Build.0 = Debug|x86
+		{34D1B034-5DEE-41E9-8095-067DFEC28249}.Debug|x86.ActiveCfg = Debug|x86
+		{34D1B034-5DEE-41E9-8095-067DFEC28249}.Debug|Any CPU.Build.0 = Debug|x86
+		{34D1B034-5DEE-41E9-8095-067DFEC28249}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{34D1B034-5DEE-41E9-8095-067DFEC28249}.Release|x86.Build.0 = Release|x86
+		{34D1B034-5DEE-41E9-8095-067DFEC28249}.Release|x86.ActiveCfg = Release|x86
+		{34D1B034-5DEE-41E9-8095-067DFEC28249}.Release|Any CPU.Build.0 = Release|x86
+		{34D1B034-5DEE-41E9-8095-067DFEC28249}.Release|Any CPU.ActiveCfg = Release|x86
 	EndGlobalSection
 EndGlobal

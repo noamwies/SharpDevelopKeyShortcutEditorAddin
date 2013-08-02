@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
-    <ProjectGuid>{B7ECA412-510B-49C0-9380-7BB75467C715}</ProjectGuid>
+    <ProjectGuid>{34D1B034-5DEE-41E9-8095-067DFEC28249}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>Library</OutputType>
-    <RootNamespace>KeyShortcutEditorAddin</RootNamespace>
-    <AssemblyName>KeyShortcutEditorAddin</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ApplyConfiguration</RootNamespace>
+    <AssemblyName>ApplyConfiguration</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
     <WarningLevel>4</WarningLevel>
@@ -37,20 +39,6 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.Core">
-      <HintPath>Refs\ICSharpCode.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.Core.Presentation">
-      <HintPath>Refs\ICSharpCode.Core.Presentation.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpDevelop">
-      <HintPath>Refs\ICSharpCode.SharpDevelop.dll</HintPath>
-    </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\packages\morelinq.1.0\lib\net35\MoreLinq.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -59,34 +47,18 @@
     <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AddInWritingHelp.txt" />
-    <None Include="KeyShortcutEditorAddin.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="packages.config" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\AssemblyInfo.cs" />
-    <Compile Include="EditKeyShortcutInAddinFiles.cs" />
-    <Compile Include="EditShortcutsuPanel.xaml.cs">
-      <DependentUpon>EditShortcutsuPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ObservableCollectionExtention.cs" />
-    <Compile Include="ShortcutView.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="EditShortcutsuPanel.xaml" />
+    <None Include="app.config" />
+    <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KeyShortcutsEditorAddin.Model\KeyShortcutsEditorAddin.Model.csproj">

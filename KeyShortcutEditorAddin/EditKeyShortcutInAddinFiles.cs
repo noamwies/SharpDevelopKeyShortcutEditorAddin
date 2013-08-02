@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -93,29 +92,6 @@ namespace KeyShortcutEditorAddin
 					shortcut.Key = key;
 				}
 			}
-		}
-		
-		public void Apply()
-		{
-			var keys = (from k in KeyShortcuts where k.HasModified == true select k ).ToLookup( s => s.AddinFileName , u => u);
-			foreach (var file in keys) {
-				XDocument xml;
-				using (var fileStream = new FileStream(file.Key,FileMode.Open)) {
-					xml = XDocument.Load(fileStream);
-					foreach (var shortcut in file) {
-						var shortcutsInXml = xml.Root.XPathSelectElements(string.Format(@"//MenuItem[@label='{0}']",shortcut.Operation));
-						foreach (var shortcutInXml in shortcutsInXml) {
-							shortcutInXml.SetAttributeValue("shortcut",shortcut.Key);
-						}
-					}
-				}
-				File.Delete(file.Key);
-				using (var fileStream = new FileStream(file.Key,FileMode.CreateNew)) {
-					using (var writer = new StreamWriter(fileStream)) {
-						writer.Write(xml.ToString());
-					}
-				}
-			}
-		}
+		}		
 	}
 }

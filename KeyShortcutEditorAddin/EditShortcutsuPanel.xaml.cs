@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.IO;
 using System.Reflection;
@@ -39,10 +40,15 @@ namespace KeyShortcutEditorAddin
 		private XmlSerializer _serialzer;
 		private static readonly string SHARP_DEVELOP_SHORTCUTS_FILTER = "#Develop Shortcuts|*.sht";
 		private static readonly string SHORTCUTS_DEFAULT_DIRECTORY;
-        public ObservableCollection<ShortcutView> Shortcuts { get; set; }
-
+		private static readonly string SHORTCUTS_EDITOR_PLUGIn_DIRECTORY;
+		public ObservableCollection<ShortcutView> Shortcuts { get; set; }
+	
 		static EditShortcutsuPanel(){
-			SHORTCUTS_DEFAULT_DIRECTORY = Path.Combine(Path.GetDirectoryName(Assembly.GetAssembly(typeof(EditShortcutsuPanel)).Location),"Shortcuts");
+			SHORTCUTS_EDITOR_PLUGIn_DIRECTORY = Path.GetDirectoryName(Assembly.GetAssembly(typeof(EditShortcutsuPanel)).Location);
+			SHORTCUTS_DEFAULT_DIRECTORY = Path.Combine(SHORTCUTS_EDITOR_PLUGIn_DIRECTORY,"Shortcuts");
+			if (!Directory.Exists(SHORTCUTS_DEFAULT_DIRECTORY)) {
+				Directory.CreateDirectory(SHORTCUTS_DEFAULT_DIRECTORY);
+			}
 		}
 		
 		public EditShortcutsuPanel()
@@ -50,11 +56,11 @@ namespace KeyShortcutEditorAddin
 			InitializeComponent();
 			_serialzer = new XmlSerializer(typeof(List<KeyShortcutModel>));
 			_shortcutsEditor = new EditKeyShortcutInAddinFiles();
-            Shortcuts = ModelToView(_shortcutsEditor.KeyShortcuts);
-            _shortcutsView.DataContext = Shortcuts;
-            foreach (var element in Shortcuts) {
-            	element.PropertyChanged += new PropertyChangedEventHandler(ShortcutChange);	
-            }
+			Shortcuts = ModelToView(_shortcutsEditor.KeyShortcuts);
+			_shortcutsView.DataContext = Shortcuts;
+			foreach (var element in Shortcuts) {
+				element.PropertyChanged += new PropertyChangedEventHandler(ShortcutChange);
+			}
 		}
 
 		void ShortcutChange(object sender,  PropertyChangedEventArgs e)
@@ -62,8 +68,8 @@ namespace KeyShortcutEditorAddin
 			if (e.PropertyName == "Key") {
 				var s = sender as ShortcutView;
 				ICSharpCode.Core.LoggingService.InfoFormatted("key shortcut of {0} changed to {1}",s.Operation,s.Key);
-				_shortcutsEditor.ChangeKeyShortcut(s.Operation,s.Key);	
-				_applayLabel.Visibility = Visibility.Visible;				
+				_shortcutsEditor.ChangeKeyShortcut(s.Operation,s.Key);
+				_applayLabel.Visibility = Visibility.Visible;
 			}
 		}
 
@@ -77,11 +83,16 @@ namespace KeyShortcutEditorAddin
 			var result = dialog.ShowDialog();
 			if (result == DialogResult.OK) {
 				string path = dialog.FileName;
-				if (false == String.IsNullOrEmpty(path)){
-					using (var file = new FileStream(path,FileMode.Create))
-					{
-						_serialzer.Serialize(file,_shortcutsEditor.KeyShortcuts);
-					}
+				
+				SaveKeyShortcutsToFile(path);
+			}
+		}
+
+		void SaveKeyShortcutsToFile(string path)
+		{
+			if (false == String.IsNullOrEmpty(path)) {
+				using (var file = new FileStream(path, FileMode.Create)) {
+					_serialzer.Serialize(file, _shortcutsEditor.KeyShortcuts);
 				}
 			}
 		}
@@ -90,9 +101,9 @@ namespace KeyShortcutEditorAddin
 		public void Import(object sender, RoutedEventArgs e)
 		{
 			var dialog = new OpenFileDialog();
-			var result = dialog.ShowDialog();
 			dialog.Filter = SHARP_DEVELOP_SHORTCUTS_FILTER;
 			dialog.InitialDirectory = SHORTCUTS_DEFAULT_DIRECTORY;
+			var result = dialog.ShowDialog();
 			if (result == DialogResult.OK) {
 				string path = dialog.FileName;
 				if (false == String.IsNullOrEmpty(path)){
@@ -100,22 +111,32 @@ namespace KeyShortcutEditorAddin
 					{
 						var shortcuts = _serialzer.Deserialize(file) as List<KeyShortcutModel>;
 						foreach (var s in shortcuts) {
-							_shortcutsEditor.ChangeKeyShortcut(s.Operation,s.Key);     
+							_shortcutsEditor.ChangeKeyShortcut(s.Operation,s.Key);
 						}
 					}
 				}
 			}
-            Shortcuts = ModelToView(_shortcutsEditor.KeyShortcuts);
-			_shortcutsEditor.Apply();
+			Shortcuts = ModelToView(_shortcutsEditor.KeyShortcuts);
+			Apply(null,null);
 		}
 
-        private ObservableCollection<ShortcutView> ModelToView(List<KeyShortcutModel> model) {
+		private ObservableCollection<ShortcutView> ModelToView(List<KeyShortcutModel> model) {
 			return model.Select(s => new ShortcutView { Key = s.Key, Operation = s.Operation}).DistinctBy( s => s.Operation ).ToObservableCollection<ShortcutView>();
-        }
+		}
 
 		
 		public void Apply(object sender, RoutedEventArgs e){
-			_shortcutsEditor.Apply();
+			string tempPath = Path.Combine(SHORTCUTS_DEFAULT_DIRECTORY,"current.tmp");
+			SaveKeyShortcutsToFile(tempPath);
+			var psi = new ProcessStartInfo();
+			psi.FileName =Path.Combine(SHORTCUTS_EDITOR_PLUGIn_DIRECTORY,"ApplyConfiguration.exe");
+			psi.Arguments = tempPath;
+			psi.Verb = "runas";
+			
+			var process = new Process();
+			process.StartInfo = psi;
+			process.Start();
+			process.WaitForExit();
 			_restartLabel.Visibility = Visibility.Visible;
 			_applayLabel.Visibility = Visibility.Collapsed;
 		}
@@ -125,8 +146,8 @@ namespace KeyShortcutEditorAddin
 			if (Shortcuts != null) {
 				foreach (var element in Shortcuts) {
 					element.ShouldExport = _selectAll.IsChecked.Value;
-				}	
-			}			
+				}
+			}
 		}
 		
 		void Restart(object sender, RoutedEventArgs e)
