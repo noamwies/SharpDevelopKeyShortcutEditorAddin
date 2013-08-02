@@ -40,12 +40,12 @@ namespace KeyShortcutEditorAddin
 		private XmlSerializer _serialzer;
 		private static readonly string SHARP_DEVELOP_SHORTCUTS_FILTER = "#Develop Shortcuts|*.sht";
 		private static readonly string SHORTCUTS_DEFAULT_DIRECTORY;
-		private static readonly string SHORTCUTS_EDITOR_PLUGIn_DIRECTORY;
+		private static readonly string SHORTCUTS_EDITOR_PLUGIN_DIRECTORY;
 		public ObservableCollection<ShortcutView> Shortcuts { get; set; }
 	
 		static EditShortcutsuPanel(){
-			SHORTCUTS_EDITOR_PLUGIn_DIRECTORY = Path.GetDirectoryName(Assembly.GetAssembly(typeof(EditShortcutsuPanel)).Location);
-			SHORTCUTS_DEFAULT_DIRECTORY = Path.Combine(SHORTCUTS_EDITOR_PLUGIn_DIRECTORY,"Shortcuts");
+			SHORTCUTS_EDITOR_PLUGIN_DIRECTORY = Path.GetDirectoryName(Assembly.GetAssembly(typeof(EditShortcutsuPanel)).Location);
+			SHORTCUTS_DEFAULT_DIRECTORY = Path.Combine(SHORTCUTS_EDITOR_PLUGIN_DIRECTORY,"Shortcuts");
 			if (!Directory.Exists(SHORTCUTS_DEFAULT_DIRECTORY)) {
 				Directory.CreateDirectory(SHORTCUTS_DEFAULT_DIRECTORY);
 			}
@@ -133,7 +133,7 @@ namespace KeyShortcutEditorAddin
 			string tempPath = Path.Combine(SHORTCUTS_DEFAULT_DIRECTORY,"current.tmp");
 			SaveKeyShortcutsToFile(tempPath);
 			var psi = new ProcessStartInfo();
-			psi.FileName =Path.Combine(SHORTCUTS_EDITOR_PLUGIn_DIRECTORY,"ApplyConfiguration.exe");
+			psi.FileName =Path.Combine(SHORTCUTS_EDITOR_PLUGIN_DIRECTORY,"ApplyConfiguration.exe");
 			psi.Arguments = tempPath;
 			psi.Verb = "runas";
 			
