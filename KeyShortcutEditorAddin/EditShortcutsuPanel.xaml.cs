@@ -61,6 +61,10 @@ namespace KeyShortcutEditorAddin
 			foreach (var element in Shortcuts) {
 				element.PropertyChanged += new PropertyChangedEventHandler(ShortcutChange);
 			}
+			string defaultShortcutsFile = Path.Combine(SHORTCUTS_DEFAULT_DIRECTORY,"default.sht");
+			if (!File.Exists(defaultShortcutsFile)) {
+				SaveKeyShortcutsToFile(defaultShortcutsFile);
+			}
 		}
 
 		void ShortcutChange(object sender,  PropertyChangedEventArgs e)
