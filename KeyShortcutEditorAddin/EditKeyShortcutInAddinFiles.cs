@@ -22,36 +22,77 @@ namespace KeyShortcutEditorAddin
 	/// </summary>
 	public class EditKeyShortcutInAddinFiles
 	{
-		private string _addinDirectory;
+		private string _additionalAddinDirectory;
+		
+		private string _defaultAddinDirectory;
 		
 		public List<KeyShortcutModel> KeyShortcuts { get;private  set; }
-			
+		
 		public EditKeyShortcutInAddinFiles()
 		{
-			_addinDirectory = Path.GetDirectoryName(Assembly.GetAssembly(this.GetType()).Location);
-			int prefixStopIndex = _addinDirectory.IndexOf("AddIns");
-			_addinDirectory = _addinDirectory.Substring(0,prefixStopIndex+6); // add 6 for the word "AddIns"
 			KeyShortcuts = new List<KeyShortcutModel>();
-			string [] addinFiles = Directory.GetFiles(_addinDirectory,"*.addin",SearchOption.AllDirectories);
+			
+			// add shortcuts of manualy installed plugins
+			_additionalAddinDirectory = Path.GetDirectoryName(Assembly.GetAssembly(this.GetType()).Location);
+			int prefixStopIndex = _additionalAddinDirectory.IndexOf("AddIns");
+			_additionalAddinDirectory = _additionalAddinDirectory.Substring(0,prefixStopIndex+6); // add 6 for the word "AddIns"
+			foreach (var shortcut in ExtractShortcutsFromDirectory(_additionalAddinDirectory)) {
+				KeyShortcuts.Add(shortcut);
+			}
+			
+			// add shortcuts of automatically installed plugins
+			_defaultAddinDirectory = FindSharpDeveloperApplication();
+			_defaultAddinDirectory = _defaultAddinDirectory.Substring(0,_defaultAddinDirectory.IndexOf("bin")+3); // add 6 for the word "bin"
+			_defaultAddinDirectory = Directory.GetParent(_defaultAddinDirectory).GetDirectories("AddIns",SearchOption.AllDirectories).FirstOrDefault().FullName;
+			if (!string.IsNullOrEmpty(_defaultAddinDirectory) && Directory.Exists(_defaultAddinDirectory)) {
+				foreach (var shortcut in ExtractShortcutsFromDirectory(_defaultAddinDirectory)) {
+					KeyShortcuts.Add(shortcut);
+				}				
+			}			
+		}
+		
+		private string FindSharpDeveloperApplication(){
+			if (Environment.CurrentDirectory.IndexOf("SharpDevelop") > 0 ) {
+				return Environment.CurrentDirectory;
+			}
+			string temp = Path.Combine(Environment.SpecialFolder.ProgramFilesX86.ToString(),"SharpDevelop");
+			if (Directory.Exists(temp)) {
+				return Path.Combine(temp,Directory.EnumerateDirectories(temp).LastOrDefault());
+			}
+			temp = Path.Combine(Environment.SpecialFolder.ProgramFiles.ToString(),"SharpDevelop");
+			if (Directory.Exists(temp)) {
+				return Path.Combine(temp,Directory.EnumerateDirectories(temp).LastOrDefault());
+			}
+			return "";			
+		}
+		
+		private IEnumerable<KeyShortcutModel> ExtractShortcutsFromDirectory(string dir)
+		{
+			string[] addinFiles = Directory.GetFiles(dir, "*.addin", SearchOption.AllDirectories);
 			foreach (var addin in addinFiles) {
-				var xml = XDocument.Load(addin);				
-				var shortcutsInXml = xml.Root.XPathSelectElements(@"//MenuItem[@shortcut]").ToList();
+				var xml = XDocument.Load(addin);
+				var shortcutsInXml = xml.Root.XPathSelectElements("//MenuItem[@shortcut]").ToList();
 				foreach (var shortcuts in shortcutsInXml) {
 					string name = shortcuts.Attribute("shortcut").Value;
-					string label = shortcuts.Attribute("label").Value; 
-					KeyShortcuts.Add(new KeyShortcutModel{AddinFileName = addin,HasModified = false,Key=name,Operation = label});
+					string label = shortcuts.Attribute("label").Value;
+					yield return new KeyShortcutModel {
+					                 	AddinFileName = addin,
+					                 	HasModified = false,
+					                 	Key = name,
+					                 	Operation = label
+					                 };
 				}
 			}
 		}
-		
+
 		public void ChangeKeyShortcut(string label,string key){
 			IEnumerable<KeyShortcutModel> shortcuts = from k in KeyShortcuts where k.Operation == label select k;
 			foreach (var shortcut in shortcuts) {
 				if (shortcut.Key != key) {
 					shortcut.HasModified = true;
-					shortcut.Key = key;		
-				}				
-			}			
+					shortcut.Key = key;
+				}
+			}
 		}
 		
 		public void Apply()
@@ -60,20 +101,20 @@ namespace KeyShortcutEditorAddin
 			foreach (var file in keys) {
 				XDocument xml;
 				using (var fileStream = new FileStream(file.Key,FileMode.Open)) {
-					xml = XDocument.Load(fileStream);						
+					xml = XDocument.Load(fileStream);
 					foreach (var shortcut in file) {
 						var shortcutsInXml = xml.Root.XPathSelectElements(string.Format(@"//MenuItem[@label='{0}']",shortcut.Operation));
 						foreach (var shortcutInXml in shortcutsInXml) {
-							shortcutInXml.SetAttributeValue("shortcut",shortcut.Key);		
-						}																
-					}					
-				}	
+							shortcutInXml.SetAttributeValue("shortcut",shortcut.Key);
+						}
+					}
+				}
 				File.Delete(file.Key);
 				using (var fileStream = new FileStream(file.Key,FileMode.CreateNew)) {
 					using (var writer = new StreamWriter(fileStream)) {
 						writer.Write(xml.ToString());
 					}
-				}				
+				}
 			}
 		}
 	}
