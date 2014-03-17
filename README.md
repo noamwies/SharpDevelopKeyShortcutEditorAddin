@@ -5,4 +5,4 @@ Are you use visual studio at work and mix the shortcuts ? or just you don't like
 
 with this addin you can change the shortcuts of SharpDevelop :) 
 
-you can download binary version at https://www.dropbox.com/sh/wo7yd5yzdjor6yp/PQ0_5OGyNV
+you can download binary version at http://noamwies.github.io/SharpDevelopKeyShortcutEditorAddin/download.html
