@@ -92,6 +92,10 @@
     <Page Include="EditShortcutsuPanel.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ApplyConfiguration\ApplyConfiguration.csproj">
+      <Project>{34D1B034-5DEE-41E9-8095-067DFEC28249}</Project>
+      <Name>ApplyConfiguration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KeyShortcutsEditorAddin.Model\KeyShortcutsEditorAddin.Model.csproj">
       <Project>{AA750BC0-281C-4919-B2B1-7C3CFD2459FE}</Project>
       <Name>KeyShortcutsEditorAddin.Model</Name>
