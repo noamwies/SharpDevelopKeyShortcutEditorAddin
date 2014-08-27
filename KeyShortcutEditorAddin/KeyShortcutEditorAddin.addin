@@ -1,7 +1,7 @@
 ﻿<AddIn name        = "KeyShortcutEditorAddin"
        author      = "Noam"
-       url         = ""
-       description = "TODO: Change KeyShortcut to Visual Studio KeyShortcut">
+       url         = "http://noamwies.github.io/SharpDevelopKeyShortcutEditorAddin/"
+       description = "Enable KeyShortcut Customization">
 	
 	<Runtime>
 		<Import assembly = "KeyShortcutEditorAddin.dll"/>
